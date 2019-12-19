@@ -1,0 +1,603 @@
+<!doctype html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="initial-scale=1,user-scalable=no,maximum-scale=1,width=device-width">
+        <meta name="mobile-web-app-capable" content="yes">
+        <meta name="apple-mobile-web-app-capable" content="yes">
+        <link rel="stylesheet" href="css/leaflet.css"><link rel="stylesheet" href="css/L.Control.Locate.min.css">
+        <link rel="stylesheet" href="css/qgis2web.css"><link rel="stylesheet" href="css/fontawesome-all.min.css">
+        <link rel="stylesheet" href="css/leaflet-search.css">
+        <link rel="stylesheet" href="css/leaflet-measure.css">
+        <style>
+        #map {
+            width: 1189px;
+            height: 881px;
+        }
+        </style>
+        <title></title>
+    </head>
+    <body>
+        <div id="map">
+        </div>
+        <script src="js/qgis2web_expressions.js"></script>
+        <script src="js/leaflet.js"></script><script src="js/L.Control.Locate.min.js"></script>
+        <script src="js/leaflet.rotatedMarker.js"></script>
+        <script src="js/leaflet.pattern.js"></script>
+        <script src="js/leaflet-hash.js"></script>
+        <script src="js/Autolinker.min.js"></script>
+        <script src="js/rbush.min.js"></script>
+        <script src="js/labelgun.min.js"></script>
+        <script src="js/labels.js"></script>
+        <script src="js/leaflet-measure.js"></script>
+        <script src="js/leaflet-search.js"></script>
+        <script src="data/RanchDatabuff_1.js"></script>
+        <script src="data/Ranch_2.js"></script>
+        <script src="data/RanchDataWellsWithin3Miles_3.js"></script>
+        <script>
+        var highlightLayer;
+        function highlightFeature(e) {
+            highlightLayer = e.target;
+
+            if (e.target.feature.geometry.type === 'LineString') {
+              highlightLayer.setStyle({
+                color: '#ffff00',
+              });
+            } else {
+              highlightLayer.setStyle({
+                fillColor: '#ffff00',
+                fillOpacity: 1
+              });
+            }
+        }
+        var map = L.map('map', {
+            zoomControl:true, maxZoom:28, minZoom:1
+        }).fitBounds([[37.238125229912946,-96.61527365180528],[37.36642170490955,-96.40114179540369]]);
+        var hash = new L.Hash(map);
+        map.attributionControl.setPrefix('<a href="https://github.com/tomchadwin/qgis2web" target="_blank">qgis2web</a> &middot; <a href="https://leafletjs.com" title="A JS library for interactive maps">Leaflet</a> &middot; <a href="https://qgis.org">QGIS</a>');
+        L.control.locate({locateOptions: {maxZoom: 19}}).addTo(map);
+        var measureControl = new L.Control.Measure({
+            position: 'topleft',
+            primaryLengthUnit: 'feet',
+            secondaryLengthUnit: 'miles',
+            primaryAreaUnit: 'sqfeet',
+            secondaryAreaUnit: 'sqmiles'
+        });
+        measureControl.addTo(map);
+        document.getElementsByClassName('leaflet-control-measure-toggle')[0]
+        .innerHTML = '';
+        document.getElementsByClassName('leaflet-control-measure-toggle')[0]
+        .className += ' fas fa-ruler';
+        var bounds_group = new L.featureGroup([]);
+        function setBounds() {
+        }
+        var layer_GoogleMapsHybrid_0 = L.tileLayer('https://mt1.google.com/vt/lyrs=y&x={x}&y={y}&z={z}', {
+            opacity: 1.0,
+            attribution: '',
+            minZoom: 1,
+            maxZoom: 28,
+            minNativeZoom: 0,
+            maxNativeZoom: 18
+        });
+        layer_GoogleMapsHybrid_0;
+        map.addLayer(layer_GoogleMapsHybrid_0);
+        function pop_RanchDatabuff_1(feature, layer) {
+            layer.on({
+                mouseout: function(e) {
+                    for (i in e.target._eventParents) {
+                        e.target._eventParents[i].resetStyle(e.target);
+                    }
+                },
+                mouseover: highlightFeature,
+            });
+            var popupContent = '<table>\
+                    <tr>\
+                        <td colspan="2">' + (feature.properties['fid'] !== null ? Autolinker.link(feature.properties['fid'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td colspan="2">' + (feature.properties['Ranch'] !== null ? Autolinker.link(feature.properties['Ranch'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                </table>';
+            layer.bindPopup(popupContent, {maxHeight: 400});
+        }
+
+        function style_RanchDatabuff_1_0() {
+            return {
+                pane: 'pane_RanchDatabuff_1',
+                opacity: 1,
+                color: 'rgba(35,35,35,1.0)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 1.0, 
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(152,125,183,1.0)',
+                interactive: false,
+            }
+        }
+        map.createPane('pane_RanchDatabuff_1');
+        map.getPane('pane_RanchDatabuff_1').style.zIndex = 401;
+        map.getPane('pane_RanchDatabuff_1').style['mix-blend-mode'] = 'normal';
+        var layer_RanchDatabuff_1 = new L.geoJson(json_RanchDatabuff_1, {
+            attribution: '',
+            interactive: false,
+            dataVar: 'json_RanchDatabuff_1',
+            layerName: 'layer_RanchDatabuff_1',
+            pane: 'pane_RanchDatabuff_1',
+            onEachFeature: pop_RanchDatabuff_1,
+            style: style_RanchDatabuff_1_0,
+        });
+        bounds_group.addLayer(layer_RanchDatabuff_1);
+        map.addLayer(layer_RanchDatabuff_1);
+        function pop_Ranch_2(feature, layer) {
+            layer.on({
+                mouseout: function(e) {
+                    for (i in e.target._eventParents) {
+                        e.target._eventParents[i].resetStyle(e.target);
+                    }
+                },
+                mouseover: highlightFeature,
+            });
+            var popupContent = '<table>\
+                    <tr>\
+                        <td colspan="2">' + (feature.properties['fid'] !== null ? Autolinker.link(feature.properties['fid'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td colspan="2">' + (feature.properties['Ranch'] !== null ? Autolinker.link(feature.properties['Ranch'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                </table>';
+            layer.bindPopup(popupContent, {maxHeight: 400});
+        }
+
+        function style_Ranch_2_0() {
+            return {
+                pane: 'pane_Ranch_2',
+                opacity: 1,
+                color: 'rgba(35,35,35,1.0)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 1.0, 
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(196,60,57,1.0)',
+                interactive: false,
+            }
+        }
+        map.createPane('pane_Ranch_2');
+        map.getPane('pane_Ranch_2').style.zIndex = 402;
+        map.getPane('pane_Ranch_2').style['mix-blend-mode'] = 'normal';
+        var layer_Ranch_2 = new L.geoJson(json_Ranch_2, {
+            attribution: '',
+            interactive: false,
+            dataVar: 'json_Ranch_2',
+            layerName: 'layer_Ranch_2',
+            pane: 'pane_Ranch_2',
+            onEachFeature: pop_Ranch_2,
+            style: style_Ranch_2_0,
+        });
+        bounds_group.addLayer(layer_Ranch_2);
+        map.addLayer(layer_Ranch_2);
+        function pop_RanchDataWellsWithin3Miles_3(feature, layer) {
+            layer.on({
+                mouseout: function(e) {
+                    for (i in e.target._eventParents) {
+                        e.target._eventParents[i].resetStyle(e.target);
+                    }
+                },
+                mouseover: highlightFeature,
+            });
+            var popupContent = '<table>\
+                    <tr>\
+                        <td colspan="2">' + (feature.properties['fid'] !== null ? Autolinker.link(feature.properties['fid'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td colspan="2">' + (feature.properties['OBJECTID'] !== null ? Autolinker.link(feature.properties['OBJECTID'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td colspan="2">' + (feature.properties['KID'] !== null ? Autolinker.link(feature.properties['KID'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td colspan="2">' + (feature.properties['STATE_CODE'] !== null ? Autolinker.link(feature.properties['STATE_CODE'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td colspan="2">' + (feature.properties['COUNTY_COD'] !== null ? Autolinker.link(feature.properties['COUNTY_COD'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">API_WELL_N</th>\
+                        <td>' + (feature.properties['API_WELL_N'] !== null ? Autolinker.link(feature.properties['API_WELL_N'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td colspan="2">' + (feature.properties['API_WORKOV'] !== null ? Autolinker.link(feature.properties['API_WORKOV'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td colspan="2">' + (feature.properties['FIELD_NAME'] !== null ? Autolinker.link(feature.properties['FIELD_NAME'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td colspan="2">' + (feature.properties['FIELD_KID'] !== null ? Autolinker.link(feature.properties['FIELD_KID'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td colspan="2">' + (feature.properties['LEASE_NAME'] !== null ? Autolinker.link(feature.properties['LEASE_NAME'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">WELL_NAME</th>\
+                        <td>' + (feature.properties['WELL_NAME'] !== null ? Autolinker.link(feature.properties['WELL_NAME'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">WELL_CLASS</th>\
+                        <td>' + (feature.properties['WELL_CLASS'] !== null ? Autolinker.link(feature.properties['WELL_CLASS'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td colspan="2">' + (feature.properties['OPERATOR_N'] !== null ? Autolinker.link(feature.properties['OPERATOR_N'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td colspan="2">' + (feature.properties['OPERATOR_K'] !== null ? Autolinker.link(feature.properties['OPERATOR_K'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td colspan="2">' + (feature.properties['PRINCIPAL_'] !== null ? Autolinker.link(feature.properties['PRINCIPAL_'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td colspan="2">' + (feature.properties['TOWNSHIP'] !== null ? Autolinker.link(feature.properties['TOWNSHIP'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td colspan="2">' + (feature.properties['TOWNSHIP_D'] !== null ? Autolinker.link(feature.properties['TOWNSHIP_D'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td colspan="2">' + (feature.properties['RANGE'] !== null ? Autolinker.link(feature.properties['RANGE'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td colspan="2">' + (feature.properties['RANGE_DIRE'] !== null ? Autolinker.link(feature.properties['RANGE_DIRE'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td colspan="2">' + (feature.properties['SECTION'] !== null ? Autolinker.link(feature.properties['SECTION'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td colspan="2">' + (feature.properties['SUBDIVISIO'] !== null ? Autolinker.link(feature.properties['SUBDIVISIO'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td colspan="2">' + (feature.properties['SUBDIVIS_1'] !== null ? Autolinker.link(feature.properties['SUBDIVIS_1'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td colspan="2">' + (feature.properties['SUBDIVIS_2'] !== null ? Autolinker.link(feature.properties['SUBDIVIS_2'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td colspan="2">' + (feature.properties['SUBDIVIS_3'] !== null ? Autolinker.link(feature.properties['SUBDIVIS_3'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td colspan="2">' + (feature.properties['SPOT'] !== null ? Autolinker.link(feature.properties['SPOT'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td colspan="2">' + (feature.properties['FEET_NORTH'] !== null ? Autolinker.link(feature.properties['FEET_NORTH'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td colspan="2">' + (feature.properties['FEET_EAST_'] !== null ? Autolinker.link(feature.properties['FEET_EAST_'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td colspan="2">' + (feature.properties['REFERENCE_'] !== null ? Autolinker.link(feature.properties['REFERENCE_'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td colspan="2">' + (feature.properties['ROTARY_TOT'] !== null ? Autolinker.link(feature.properties['ROTARY_TOT'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">STATUS</th>\
+                        <td>' + (feature.properties['STATUS'] !== null ? Autolinker.link(feature.properties['STATUS'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">SPUD_DATE</th>\
+                        <td>' + (feature.properties['SPUD_DATE'] !== null ? Autolinker.link(feature.properties['SPUD_DATE'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">PERMIT_DAT</th>\
+                        <td>' + (feature.properties['PERMIT_DAT'] !== null ? Autolinker.link(feature.properties['PERMIT_DAT'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">COMPLETION</th>\
+                        <td>' + (feature.properties['COMPLETION'] !== null ? Autolinker.link(feature.properties['COMPLETION'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">API_NUMBER</th>\
+                        <td>' + (feature.properties['API_NUMBER'] !== null ? Autolinker.link(feature.properties['API_NUMBER'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">PLUG_DATE</th>\
+                        <td>' + (feature.properties['PLUG_DATE'] !== null ? Autolinker.link(feature.properties['PLUG_DATE'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td colspan="2">' + (feature.properties['ELEVATION_'] !== null ? Autolinker.link(feature.properties['ELEVATION_'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td colspan="2">' + (feature.properties['ELEVATION1'] !== null ? Autolinker.link(feature.properties['ELEVATION1'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td colspan="2">' + (feature.properties['ELEVATIO_1'] !== null ? Autolinker.link(feature.properties['ELEVATIO_1'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">PRODUCING_</th>\
+                        <td>' + (feature.properties['PRODUCING_'] !== null ? Autolinker.link(feature.properties['PRODUCING_'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td colspan="2">' + (feature.properties['NAD27_LATI'] !== null ? Autolinker.link(feature.properties['NAD27_LATI'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td colspan="2">' + (feature.properties['NAD27_LONG'] !== null ? Autolinker.link(feature.properties['NAD27_LONG'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td colspan="2">' + (feature.properties['NAD83_LATI'] !== null ? Autolinker.link(feature.properties['NAD83_LATI'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td colspan="2">' + (feature.properties['NAD83_LONG'] !== null ? Autolinker.link(feature.properties['NAD83_LONG'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td colspan="2">' + (feature.properties['LONGITUDE_'] !== null ? Autolinker.link(feature.properties['LONGITUDE_'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td colspan="2">' + (feature.properties['COMPLETI_1'] !== null ? Autolinker.link(feature.properties['COMPLETI_1'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">WELL_TYPE</th>\
+                        <td>' + (feature.properties['WELL_TYPE'] !== null ? Autolinker.link(feature.properties['WELL_TYPE'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td colspan="2">' + (feature.properties['COUNTY'] !== null ? Autolinker.link(feature.properties['COUNTY'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                </table>';
+            layer.bindPopup(popupContent, {maxHeight: 400});
+        }
+
+        function style_RanchDataWellsWithin3Miles_3_0(feature) {
+            switch(String(feature.properties['WELL_CLASS'])) {
+                case 'Approved Intent to Drill':
+                    return {
+                pane: 'pane_RanchDataWellsWithin3Miles_3',
+                radius: 4.0,
+                opacity: 1,
+                color: 'rgba(35,35,35,1.0)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 1,
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(58,152,202,1.0)',
+                interactive: true,
+            }
+                    break;
+                case 'Authorized Injection Well':
+                    return {
+                pane: 'pane_RanchDataWellsWithin3Miles_3',
+                radius: 4.0,
+                opacity: 1,
+                color: 'rgba(35,35,35,1.0)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 1,
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(130,229,30,1.0)',
+                interactive: true,
+            }
+                    break;
+                case 'Converted to EOR Well':
+                    return {
+                pane: 'pane_RanchDataWellsWithin3Miles_3',
+                radius: 4.0,
+                opacity: 1,
+                color: 'rgba(35,35,35,1.0)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 1,
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(25,240,215,1.0)',
+                interactive: true,
+            }
+                    break;
+                case 'Converted to SWD Well':
+                    return {
+                pane: 'pane_RanchDataWellsWithin3Miles_3',
+                radius: 4.0,
+                opacity: 1,
+                color: 'rgba(35,35,35,1.0)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 1,
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(64,214,58,1.0)',
+                interactive: true,
+            }
+                    break;
+                case 'Inactive Well':
+                    return {
+                pane: 'pane_RanchDataWellsWithin3Miles_3',
+                radius: 4.0,
+                opacity: 1,
+                color: 'rgba(35,35,35,1.0)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 1,
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(209,156,86,1.0)',
+                interactive: true,
+            }
+                    break;
+                case 'Injection Authorization Terminated':
+                    return {
+                pane: 'pane_RanchDataWellsWithin3Miles_3',
+                radius: 4.0,
+                opacity: 1,
+                color: 'rgba(35,35,35,1.0)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 1,
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(69,99,216,1.0)',
+                interactive: true,
+            }
+                    break;
+                case 'ON LIST':
+                    return {
+                pane: 'pane_RanchDataWellsWithin3Miles_3',
+                radius: 4.0,
+                opacity: 1,
+                color: 'rgba(35,35,35,1.0)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 1,
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(198,203,54,1.0)',
+                interactive: true,
+            }
+                    break;
+                case 'Plugged and Abandoned':
+                    return {
+                pane: 'pane_RanchDataWellsWithin3Miles_3',
+                radius: 4.0,
+                opacity: 1,
+                color: 'rgba(35,35,35,1.0)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 1,
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(125,225,169,1.0)',
+                interactive: true,
+            }
+                    break;
+                case 'Producing':
+                    return {
+                pane: 'pane_RanchDataWellsWithin3Miles_3',
+                radius: 5.6,
+                opacity: 1,
+                color: 'rgba(35,35,35,1.0)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 1,
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(218,59,38,1.0)',
+                interactive: true,
+            }
+                    break;
+                case 'Recompleted':
+                    return {
+                pane: 'pane_RanchDataWellsWithin3Miles_3',
+                radius: 4.0,
+                opacity: 1,
+                color: 'rgba(35,35,35,1.0)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 1,
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(100,50,237,1.0)',
+                interactive: true,
+            }
+                    break;
+                case 'Spudded':
+                    return {
+                pane: 'pane_RanchDataWellsWithin3Miles_3',
+                radius: 4.0,
+                opacity: 1,
+                color: 'rgba(35,35,35,1.0)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 1,
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(228,108,206,1.0)',
+                interactive: true,
+            }
+                    break;
+                case 'Well Drilled':
+                    return {
+                pane: 'pane_RanchDataWellsWithin3Miles_3',
+                radius: 4.0,
+                opacity: 1,
+                color: 'rgba(35,35,35,1.0)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 1,
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(183,76,222,1.0)',
+                interactive: true,
+            }
+                    break;
+                default:
+                    return {
+                pane: 'pane_RanchDataWellsWithin3Miles_3',
+                radius: 4.0,
+                opacity: 1,
+                color: 'rgba(35,35,35,1.0)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 1,
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(230,63,122,1.0)',
+                interactive: true,
+            }
+                    break;
+            }
+        }
+        map.createPane('pane_RanchDataWellsWithin3Miles_3');
+        map.getPane('pane_RanchDataWellsWithin3Miles_3').style.zIndex = 403;
+        map.getPane('pane_RanchDataWellsWithin3Miles_3').style['mix-blend-mode'] = 'normal';
+        var layer_RanchDataWellsWithin3Miles_3 = new L.geoJson(json_RanchDataWellsWithin3Miles_3, {
+            attribution: '',
+            interactive: true,
+            dataVar: 'json_RanchDataWellsWithin3Miles_3',
+            layerName: 'layer_RanchDataWellsWithin3Miles_3',
+            pane: 'pane_RanchDataWellsWithin3Miles_3',
+            onEachFeature: pop_RanchDataWellsWithin3Miles_3,
+            pointToLayer: function (feature, latlng) {
+                var context = {
+                    feature: feature,
+                    variables: {}
+                };
+                return L.circleMarker(latlng, style_RanchDataWellsWithin3Miles_3_0(feature));
+            },
+        });
+        bounds_group.addLayer(layer_RanchDataWellsWithin3Miles_3);
+        map.addLayer(layer_RanchDataWellsWithin3Miles_3);
+        var baseMaps = {};
+        L.control.layers(baseMaps,{'RanchData WellsWithin3Miles<br /><table><tr><td style="text-align: center;"><img src="legend/RanchDataWellsWithin3Miles_3_ApprovedIntenttoDrill0.png" /></td><td>Approved Intent to Drill</td></tr><tr><td style="text-align: center;"><img src="legend/RanchDataWellsWithin3Miles_3_AuthorizedInjectionWell1.png" /></td><td>Authorized Injection Well</td></tr><tr><td style="text-align: center;"><img src="legend/RanchDataWellsWithin3Miles_3_ConvertedtoEORWell2.png" /></td><td>Converted to EOR Well</td></tr><tr><td style="text-align: center;"><img src="legend/RanchDataWellsWithin3Miles_3_ConvertedtoSWDWell3.png" /></td><td>Converted to SWD Well</td></tr><tr><td style="text-align: center;"><img src="legend/RanchDataWellsWithin3Miles_3_InactiveWell4.png" /></td><td>Inactive Well</td></tr><tr><td style="text-align: center;"><img src="legend/RanchDataWellsWithin3Miles_3_InjectionAuthorizationTerminated5.png" /></td><td>Injection Authorization Terminated</td></tr><tr><td style="text-align: center;"><img src="legend/RanchDataWellsWithin3Miles_3_ONLIST6.png" /></td><td>ON LIST</td></tr><tr><td style="text-align: center;"><img src="legend/RanchDataWellsWithin3Miles_3_PluggedandAbandoned7.png" /></td><td>Plugged and Abandoned</td></tr><tr><td style="text-align: center;"><img src="legend/RanchDataWellsWithin3Miles_3_Producing8.png" /></td><td>Producing</td></tr><tr><td style="text-align: center;"><img src="legend/RanchDataWellsWithin3Miles_3_Recompleted9.png" /></td><td>Recompleted</td></tr><tr><td style="text-align: center;"><img src="legend/RanchDataWellsWithin3Miles_3_Spudded10.png" /></td><td>Spudded</td></tr><tr><td style="text-align: center;"><img src="legend/RanchDataWellsWithin3Miles_3_WellDrilled11.png" /></td><td>Well Drilled</td></tr><tr><td style="text-align: center;"><img src="legend/RanchDataWellsWithin3Miles_3_12.png" /></td><td></td></tr></table>': layer_RanchDataWellsWithin3Miles_3,'<img src="legend/Ranch_2.png" /> Ranch': layer_Ranch_2,'<img src="legend/RanchDatabuff_1.png" /> RanchDatabuff': layer_RanchDatabuff_1,"Google Maps Hybrid": layer_GoogleMapsHybrid_0,},{collapsed:false}).addTo(map);
+        setBounds();
+        map.addControl(new L.Control.Search({
+            layer: layer_RanchDataWellsWithin3Miles_3,
+            initial: false,
+            hideMarkerOnCollapse: true,
+            propertyName: 'STATUS'}));
+        document.getElementsByClassName('search-button')[0].className +=
+         ' fa fa-binoculars';
+        resetLabels([layer_RanchDataWellsWithin3Miles_3]);
+        map.on("zoomend", function(){
+            resetLabels([layer_RanchDataWellsWithin3Miles_3]);
+        });
+        map.on("layeradd", function(){
+            resetLabels([layer_RanchDataWellsWithin3Miles_3]);
+        });
+        map.on("layerremove", function(){
+            resetLabels([layer_RanchDataWellsWithin3Miles_3]);
+        });
+        </script>
+    </body>
+</html>
